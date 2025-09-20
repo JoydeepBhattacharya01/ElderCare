@@ -11,7 +11,11 @@ import {
   AlertTriangle,
   CheckCircle,
   Calendar,
-  Target
+  Target,
+  Sparkles,
+  Sun,
+  Moon,
+  Sunset
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -72,33 +76,78 @@ const Dashboard = () => {
     }
   };
 
+  const getGreetingIcon = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return <Sun className="w-8 h-8 text-yellow-500" />;
+    if (hour < 18) return <Sun className="w-8 h-8 text-orange-500" />;
+    return <Moon className="w-8 h-8 text-indigo-400" />;
+  };
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 18) return 'Good Afternoon';
+    return 'Good Evening';
+  };
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="relative">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto"></div>
+            <Sparkles className="w-6 h-6 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+          </div>
+          <p className="text-xl text-gray-600 font-medium">Loading your health dashboard...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-primary-600 to-secondary-600 rounded-2xl p-6 text-white">
-        <h1 className="text-3xl font-bold mb-2">
-          Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 18 ? 'Afternoon' : 'Evening'}, {user?.name}!
-        </h1>
-        <p className="text-lg opacity-90">
-          Here's your health overview for today
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="container-padding py-8 space-y-8">
+        <div className="card-gradient animate-fade-in">
+          <div className="flex items-center justify-between">
+            <div className="space-y-4">
+              <div className="flex items-center space-x-4">
+                {getGreetingIcon()}
+                <div>
+                  <h1 className="text-4xl font-bold gradient-text">
+                    {getGreeting()}, {user?.name}! ✨
+                  </h1>
+                  <p className="text-xl text-gray-600 mt-2">
+                    Here's your personalized health overview for today
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 bg-white/60 rounded-full px-4 py-2 shadow-sm">
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse-gentle"></div>
+                  <span className="text-sm font-medium text-gray-700">System Status: Healthy</span>
+                </div>
+                <div className="bg-white/60 rounded-full px-4 py-2 shadow-sm">
+                  <span className="text-sm font-medium text-gray-700">
+                    {new Date().toLocaleDateString('en-US', { 
+                      weekday: 'long', 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      {/* Health Status Alert */}
-      {dashboardData.healthRisk && (
-        <div className={`card border-l-4 ${
-          dashboardData.healthRisk.level === 'green' ? 'border-success-500' :
-          dashboardData.healthRisk.level === 'yellow' ? 'border-warning-500' :
-          'border-danger-500'
-        }`}>
+        {/* Health Status Alert */}
+        {dashboardData.healthRisk && (
+          <div className={`card-gradient border-l-4 animate-slide-up ${
+            dashboardData.healthRisk.level === 'green' ? 'border-green-500' :
+            dashboardData.healthRisk.level === 'yellow' ? 'border-amber-500' :
+            'border-red-500'
+          }`}>
           <div className="flex items-start space-x-4">
             <div className={`p-2 rounded-lg ${getHealthStatusColor(dashboardData.healthRisk.level)}`}>
               {getHealthStatusIcon(dashboardData.healthRisk.level)}
@@ -123,83 +172,91 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Medications */}
-        <div className="card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Next Medication</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {dashboardData.medications.length > 0 ? '1' : '0'}
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-slide-up">
+          {/* Medications */}
+          <div className="card-hover group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="space-y-2">
+                <p className="text-lg font-semibold text-gray-600">Next Medication</p>
+                <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                  {dashboardData.medications.length > 0 ? '1' : '0'}
+                </p>
+              </div>
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-3xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <Pill className="w-8 h-8 text-blue-600" />
+              </div>
+            </div>
+            <div className="bg-blue-50 rounded-2xl p-3">
+              <p className="text-blue-700 font-medium text-sm">
+                {dashboardData.medications.length > 0 
+                  ? `${dashboardData.medications[0].name} at ${new Date(dashboardData.medications[0].nextReminder).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`
+                  : 'No upcoming medications 💊'
+                }
               </p>
             </div>
-            <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
-              <Pill className="w-6 h-6 text-primary-600" />
-            </div>
           </div>
-          <p className="text-sm text-gray-500 mt-2">
-            {dashboardData.medications.length > 0 
-              ? `${dashboardData.medications[0].name} at ${new Date(dashboardData.medications[0].nextReminder).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`
-              : 'No upcoming medications'
-            }
-          </p>
-        </div>
 
-        {/* Tasks */}
-        <div className="card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Today's Tasks</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {dashboardData.tasks.filter(task => !task.isCompleted).length}
+          {/* Tasks */}
+          <div className="card-hover group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="space-y-2">
+                <p className="text-lg font-semibold text-gray-600">Today's Tasks</p>
+                <p className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                  {dashboardData.tasks.filter(task => !task.isCompleted).length}
+                </p>
+              </div>
+              <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-3xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <CheckSquare className="w-8 h-8 text-green-600" />
+              </div>
+            </div>
+            <div className="bg-green-50 rounded-2xl p-3">
+              <p className="text-green-700 font-medium text-sm">
+                {dashboardData.tasks.filter(task => task.isCompleted).length} completed today! 🎯
               </p>
             </div>
-            <div className="w-12 h-12 bg-warning-100 rounded-xl flex items-center justify-center">
-              <CheckSquare className="w-6 h-6 text-warning-600" />
-            </div>
           </div>
-          <p className="text-sm text-gray-500 mt-2">
-            {dashboardData.tasks.filter(task => task.isCompleted).length} completed
-          </p>
-        </div>
 
-        {/* Heart Rate */}
-        <div className="card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Heart Rate</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {dashboardData.vitals?.heartRate?.value || '--'}
+          {/* Heart Rate */}
+          <div className="card-hover group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="space-y-2">
+                <p className="text-lg font-semibold text-gray-600">Heart Rate</p>
+                <p className="text-3xl font-bold bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent">
+                  {dashboardData.vitals?.heartRate?.value || '--'}
+                </p>
+              </div>
+              <div className="w-16 h-16 bg-gradient-to-br from-red-100 to-rose-100 rounded-3xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <Heart className="w-8 h-8 text-red-600" />
+              </div>
+            </div>
+            <div className="bg-red-50 rounded-2xl p-3">
+              <p className="text-red-700 font-medium text-sm">
+                {dashboardData.vitals?.heartRate?.unit || 'bpm'} - Looking good! ❤️
               </p>
             </div>
-            <div className="w-12 h-12 bg-danger-100 rounded-xl flex items-center justify-center">
-              <Heart className="w-6 h-6 text-danger-600" />
-            </div>
           </div>
-          <p className="text-sm text-gray-500 mt-2">
-            {dashboardData.vitals?.heartRate?.unit || 'bpm'}
-          </p>
-        </div>
 
-        {/* Steps */}
-        <div className="card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Steps Today</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {dashboardData.vitals?.steps?.value?.toLocaleString() || '--'}
+          {/* Steps */}
+          <div className="card-hover group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="space-y-2">
+                <p className="text-lg font-semibold text-gray-600">Steps Today</p>
+                <p className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                  {dashboardData.vitals?.steps?.value?.toLocaleString() || '--'}
+                </p>
+              </div>
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-3xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <TrendingUp className="w-8 h-8 text-purple-600" />
+              </div>
+            </div>
+            <div className="bg-purple-50 rounded-2xl p-3">
+              <p className="text-purple-700 font-medium text-sm">
+                Keep moving! 🚶‍♂️ Great progress!
               </p>
             </div>
-            <div className="w-12 h-12 bg-success-100 rounded-xl flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-success-600" />
-            </div>
           </div>
-          <p className="text-sm text-gray-500 mt-2">
-            Keep moving!
-          </p>
         </div>
-      </div>
 
       {/* Upcoming Medications */}
       <div className="card">
@@ -282,6 +339,7 @@ const Dashboard = () => {
             <p className="text-gray-500">No tasks for today</p>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

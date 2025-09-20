@@ -150,10 +150,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/eldercare', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/eldercare')
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log('MongoDB connection error:', err));
 
