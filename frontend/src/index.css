@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for elderly-friendly design */
+@layer base {
+  html {
+    font-size: 18px; /* Larger base font size */
+  }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .text-gray-600 {
+      @apply text-gray-800;
+    }
+    .text-gray-500 {
+      @apply text-gray-900;
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Button styles */
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 shadow-soft;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-3 px-6 rounded-xl transition-colors duration-200 shadow-soft;
+  }
+  
+  .btn-success {
+    @apply bg-success-600 hover:bg-success-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 shadow-soft;
+  }
+  
+  .btn-warning {
+    @apply bg-warning-600 hover:bg-warning-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 shadow-soft;
+  }
+  
+  .btn-danger {
+    @apply bg-danger-600 hover:bg-danger-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 shadow-soft;
+  }
+  
+  /* Card styles */
+  .card {
+    @apply bg-white rounded-2xl shadow-soft border border-gray-100 p-6;
+  }
+  
+  .card-hover {
+    @apply card hover:shadow-medium transition-shadow duration-200;
+  }
+  
+  /* Input styles */
+  .input-primary {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-lg;
+  }
+  
+  /* Text styles */
+  .text-large {
+    @apply text-xl;
+  }
+  
+  .text-extra-large {
+    @apply text-2xl;
+  }
+  
+  /* Health status indicators */
+  .health-green {
+    @apply bg-success-100 text-success-800 border border-success-200;
+  }
+  
+  .health-yellow {
+    @apply bg-warning-100 text-warning-800 border border-warning-200;
+  }
+  
+  .health-red {
+    @apply bg-danger-100 text-danger-800 border border-danger-200;
+  }
+  
+  /* Navigation styles */
+  .nav-item {
+    @apply flex items-center px-4 py-3 text-lg font-medium rounded-xl transition-colors duration-200;
+  }
+  
+  .nav-item-active {
+    @apply nav-item bg-primary-100 text-primary-700;
+  }
+  
+  .nav-item-inactive {
+    @apply nav-item text-gray-600 hover:bg-gray-100 hover:text-gray-800;
+  }
+}
+
+@layer utilities {
+  /* Custom utilities for elderly-friendly design */
+  .text-elderly {
+    @apply text-lg leading-relaxed;
+  }
+  
+  .text-elderly-large {
+    @apply text-xl leading-relaxed;
+  }
+  
+  .text-elderly-extra-large {
+    @apply text-2xl leading-relaxed;
+  }
+  
+  .spacing-elderly {
+    @apply space-y-4;
+  }
+  
+  .spacing-elderly-large {
+    @apply space-y-6;
+  }
+  
+  /* Focus styles for accessibility */
+  .focus-elderly {
+    @apply focus:outline-none focus:ring-4 focus:ring-primary-300 focus:ring-opacity-50;
+  }
+  
+  /* High contrast text */
+  .text-high-contrast {
+    @apply text-gray-900;
+  }
+  
+  /* Large touch targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+}
